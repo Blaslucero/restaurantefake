@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prueba Restaurante — Cortes Finos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --wood-dark: #2C1A0E;
+    --wood-mid: #5C3A1E;
+    --wood-warm: #8B5A2B;
+    --wood-light: #C49A6C;
+    --wood-pale: #E8D5B7;
+    --cream: #F5EFE0;
+    --gold: #C8973A;
+    --gold-light: #E8B85A;
+    --text-dark: #1A0F06;
+    --text-mid: #4A2F1A;
+    --text-muted: #7A5C3A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Raleway', sans-serif;
+    background: var(--wood-dark);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      92deg,
+      transparent,
+      transparent 80px,
+      rgba(139,90,43,0.04) 80px,
+      rgba(139,90,43,0.04) 81px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(28, 16, 8, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(200,151,58,0.2);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--wood-pale);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 300;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+    transition: all 0.3s;
+  }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    overflow: hidden;
+    background: #1A0A03;
+  }
+
+  /* SVG wood grain background en el hero */
+  #hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.18;
+  }
+
+  #hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(92,58,30,0.7) 0%, transparent 70%),
+      linear-gradient(180deg, rgba(20,10,3,0.2) 0%, rgba(20,10,3,0.85) 100%);
+  }
+
+  .wood-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(200,151,58,0.07);
+    animation: pulse-ring 6s ease-in-out infinite;
+    z-index: 1;
+  }
+
+  .wood-ring:nth-child(3) { width: 300px; height: 300px; top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:0s; }
+  .wood-ring:nth-child(4) { width: 500px; height: 500px; top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:1s; }
+  .wood-ring:nth-child(5) { width: 700px; height: 700px; top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:2s; }
+  .wood-ring:nth-child(6) { width: 920px; height: 920px; top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:3s; }
+
+  @keyframes pulse-ring {
+    0%,100% { opacity:.4; transform:translate(-50%,-50%) scale(1); }
+    50% { opacity:.1; transform:translate(-50%,-50%) scale(1.03); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 1s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 700;
+    line-height: 0.95;
+    color: var(--cream);
+    letter-spacing: -0.02em;
+    animation: fadeUp 1s 0.15s ease both;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+    display: block;
+  }
+
+  .hero-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 2rem auto;
+    animation: scaleIn 1s 0.3s ease both;
+    transform-origin: center;
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--wood-pale);
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+    animation: fadeUp 1s 0.45s ease both;
+  }
+
+  .hero-cta {
+    margin-top: 3rem;
+    animation: fadeUp 1s 0.6s ease both;
+  }
+
+  .btn-gold {
+    display: inline-block;
+    padding: 0.9rem 2.5rem;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .btn-gold::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    z-index: -1;
+  }
+
+  .btn-gold:hover { color: var(--wood-dark); }
+  .btn-gold:hover::before { transform: scaleX(1); }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+  .section-pad { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--cream);
+  }
+
+  .section-title em { font-style: italic; color: var(--gold-light); }
+
+  .gold-line {
+    width: 50px;
+    height: 1px;
+    background: var(--gold);
+    margin: 1.5rem 0;
+  }
+
+  /* HISTORIA */
+  #historia {
+    background: linear-gradient(135deg, #1E0F07 0%, #2C1A0E 50%, #1A0D05 100%);
+    border-top: 1px solid rgba(200,151,58,0.15);
+    border-bottom: 1px solid rgba(200,151,58,0.15);
+  }
+
+  .historia-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .historia-text p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--wood-pale);
+    margin-bottom: 1.2rem;
+  }
+
+  .historia-img-wrap {
+    position: relative;
+  }
+
+  .historia-img-wrap::before {
+    content: '';
+    position: absolute;
+    top: -12px; right: -12px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(200,151,58,0.3);
+    z-index: 0;
+  }
+
+  .historia-img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+    filter: sepia(20%) contrast(1.05);
+    display: block;
+  }
+
+  /* fallback si la imagen no carga */
+  .historia-img-wrap .img-fallback {
+    display: none;
+    width: 100%;
+    aspect-ratio: 4/5;
+    background: linear-gradient(145deg, #3D2010, #5C3A1E);
+    position: relative;
+    z-index: 1;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* GALERÍA */
+  #galeria { background: var(--wood-dark); }
+
+  .galeria-header { text-align: center; margin-bottom: 3.5rem; }
+  .galeria-header .gold-line { margin: 1.5rem auto; }
+
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+  }
+
+  .galeria-item {
+    overflow: hidden;
+    aspect-ratio: 1;
+    background: #3D2010;
+    position: relative;
+  }
+
+  .galeria-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(15%) contrast(1.1) brightness(0.9);
+    transition: transform 0.6s ease, filter 0.6s ease;
+    display: block;
+  }
+
+  .galeria-item:hover img {
+    transform: scale(1.08);
+    filter: sepia(0%) contrast(1.1) brightness(1.05);
+  }
+
+  /* overlay label */
+  .galeria-item .g-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 1.5rem 1rem 1rem;
+    background: linear-gradient(transparent, rgba(15,5,0,0.75));
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--cream);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .galeria-item:hover .g-label { opacity: 1; }
+
+  /* MENÚ */
+  #menu {
+    background: linear-gradient(180deg, #1A0D05 0%, #2C1A0E 100%);
+    border-top: 1px solid rgba(200,151,58,0.15);
+  }
+
+  .menu-header { text-align: center; margin-bottom: 4rem; }
+  .menu-header .gold-line { margin: 1.5rem auto; }
+
+  .menu-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .menu-category { margin-bottom: 2.5rem; }
+
+  .menu-cat-title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid rgba(200,151,58,0.25);
+    padding-bottom: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(200,151,58,0.08);
+    gap: 0.5rem;
+  }
+
+  .menu-item:last-child { border-bottom: none; }
+
+  .menu-item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--cream);
+    flex: 1;
+  }
+
+  .menu-dots {
+    flex: 1;
+    border-bottom: 1px dotted rgba(200,151,58,0.2);
+    margin: 0 0.8rem;
+    margin-bottom: 4px;
+    min-width: 16px;
+  }
+
+  .menu-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--gold-light);
+    white-space: nowrap;
+  }
+
+  /* CONTACTO */
+  #contacto {
+    background: #160B04;
+    border-top: 1px solid rgba(200,151,58,0.15);
+  }
+
+  .contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3rem;
+    text-align: center;
+  }
+
+  .contacto-block h3 {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .contacto-block p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--wood-pale);
+    line-height: 1.7;
+  }
+
+  .contacto-block a {
+    color: var(--gold-light);
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+
+  .contacto-block a:hover { color: var(--gold); }
+
+  .contacto-icon {
+    width: 52px;
+    height: 52px;
+    border: 1px solid rgba(200,151,58,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem;
+    font-size: 1.3rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #0D0603;
+    border-top: 1px solid rgba(200,151,58,0.15);
+    text-align: center;
+    padding: 2rem;
+  }
+
+  footer p {
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(24px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  @keyframes scaleIn {
+    from { transform:scaleX(0); opacity:0; }
+    to   { transform:scaleX(1); opacity:1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .historia-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .historia-img-wrap { max-width: 480px; margin: 0 auto; }
+    .menu-cols { grid-template-columns: 1fr; gap: 0; }
+    .contacto-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
+  @media (max-width: 650px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(12,6,2,0.98);
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      z-index: 200;
+    }
+    .nav-links.open a { font-size: 1.1rem; }
+    .hamburger { display: flex; }
+    .galeria-grid { grid-template-columns: repeat(2, 1fr); }
+    .section-pad { padding: 4rem 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Prueba Restaurante</div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#historia" onclick="closeMenu()">Nuestra Historia</a></li>
+    <li><a href="#galeria" onclick="closeMenu()">Galería</a></li>
+    <li><a href="#menu" onclick="closeMenu()">Menú</a></li>
+    <li><a href="#contacto" onclick="closeMenu()">Contacto</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <!-- SVG wood grain texture -->
+  <svg id="hero-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <filter id="wood-filter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.18" numOctaves="4" seed="5" result="noise"/>
+        <feColorMatrix type="saturate" values="0" in="noise" result="gray"/>
+        <feComposite in="gray" in2="SourceGraphic" operator="in"/>
+      </filter>
+      <linearGradient id="wood-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#7B4A1E"/>
+        <stop offset="20%"  stop-color="#9B6535"/>
+        <stop offset="40%"  stop-color="#7B4A1E"/>
+        <stop offset="60%"  stop-color="#C4884A"/>
+        <stop offset="80%"  stop-color="#8B5A2B"/>
+        <stop offset="100%" stop-color="#6B3A12"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="700" fill="url(#wood-grad)" filter="url(#wood-filter)"/>
+  </svg>
+
+  <div class="wood-ring"></div>
+  <div class="wood-ring"></div>
+  <div class="wood-ring"></div>
+  <div class="wood-ring"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">San Luis Potosí &bull; Cortes Premium</p>
+    <h1 class="hero-title">
+      Prueba<br>
+      <em>Restaurante</em>
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-subtitle">
+      Donde la brasa y la tradición se encuentran<br>
+      en cada corte perfectamente preparado.
+    </p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn-gold">Ver el Menú</a>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORIA -->
+<section id="historia" class="section-pad">
+  <div class="container">
+    <div class="historia-grid">
+      <div class="historia-text reveal">
+        <p class="section-label">Nuestra Historia</p>
+        <h2 class="section-title">Una herencia de <em>fuego y sabor</em></h2>
+        <div class="gold-line"></div>
+        <p>Prueba Restaurante nació en 2008 de las manos de don Rafael Mendoza, un potosino apasionado por las brasas que aprendió el arte del corte perfecto en las haciendas del centro del país. Su visión era sencilla: llevar a San Luis Potosí una experiencia de carne sin concesiones.</p>
+        <p>Durante más de quince años, cada corte que sale de nuestra cocina lleva el mismo rigor y respeto por la materia prima. Seleccionamos únicamente reses de primera calidad, maduradas al punto exacto, para que la brasa haga su magia con cada fibra.</p>
+        <p>Hoy, lo que empezó como un sueño familiar se ha convertido en el destino favorito de quienes saben que una buena carne, bien preparada, es mucho más que una comida: es una experiencia.</p>
+      </div>
+      <div class="historia-img-wrap reveal">
+        <!-- Imagen generada con SVG que simula carne / brasa si no carga foto -->
+        <svg class="historia-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600">
+          <defs>
+            <filter id="grill-blur"><feGaussianBlur stdDeviation="1.5"/></filter>
+            <radialGradient id="glow" cx="50%" cy="60%" r="55%">
+              <stop offset="0%"  stop-color="#E87030" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#2C1A0E" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="meat-texture">
+              <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="5" seed="8"/>
+              <feColorMatrix type="matrix" values="0.6 0 0 0 0.35   0 0.3 0 0 0.08   0 0 0.2 0 0.04   0 0 0 1 0"/>
+            </filter>
+          </defs>
+          <!-- Fondo oscuro tipo brasa -->
+          <rect width="480" height="600" fill="#1A0A03"/>
+          <!-- Resplandor de brasa -->
+          <rect width="480" height="600" fill="url(#glow)"/>
+          <!-- Tabla de madera - fondo -->
+          <rect x="40" y="80" width="400" height="440" rx="12" fill="#5C3010" opacity="0.6"/>
+          <!-- Corte de carne SVG estilizado -->
+          <ellipse cx="240" cy="310" rx="165" ry="120" fill="#8B2010" filter="url(#meat-texture)"/>
+          <ellipse cx="240" cy="305" rx="155" ry="110" fill="#A03015"/>
+          <!-- Marmoleado -->
+          <path d="M150 270 Q200 255 260 270 Q310 285 360 265" stroke="#C04020" stroke-width="8" fill="none" opacity="0.5"/>
+          <path d="M160 300 Q220 285 280 300 Q330 315 380 295" stroke="#B83518" stroke-width="5" fill="none" opacity="0.4"/>
+          <path d="M170 330 Q230 315 270 330 Q320 345 360 325" stroke="#C84825" stroke-width="6" fill="none" opacity="0.35"/>
+          <!-- Grasa exterior -->
+          <path d="M100 310 Q120 220 180 200 Q240 185 300 200 Q360 218 385 300 Q395 350 370 400 Q340 440 270 450 Q200 455 155 430 Q110 405 100 360 Z" fill="none" stroke="#D4A060" stroke-width="12" opacity="0.4"/>
+          <!-- Marcas de parrilla -->
+          <line x1="130" y1="255" x2="170" y2="375" stroke="#1A0A03" stroke-width="10" opacity="0.5"/>
+          <line x1="165" y1="240" x2="205" y2="375" stroke="#1A0A03" stroke-width="10" opacity="0.5"/>
+          <line x1="200" y1="232" x2="240" y2="378" stroke="#1A0A03" stroke-width="10" opacity="0.5"/>
+          <line x1="240" y1="232" x2="270" y2="378" stroke="#1A0A03" stroke-width="10" opacity="0.5"/>
+          <line x1="275" y1="238" x2="305" y2="375" stroke="#1A0A03" stroke-width="10" opacity="0.5"/>
+          <line x1="310" y1="248" x2="340" y2="372" stroke="#1A0A03" stroke-width="10" opacity="0.5"/>
+          <!-- Brillo en la superficie -->
+          <ellipse cx="200" cy="270" rx="60" ry="30" fill="white" opacity="0.06" transform="rotate(-15,200,270)"/>
+          <!-- Brasas / chispas -->
+          <circle cx="80"  cy="520" r="3" fill="#E87030" opacity="0.8"/>
+          <circle cx="130" cy="540" r="2" fill="#F09040" opacity="0.6"/>
+          <circle cx="380" cy="510" r="4" fill="#E87030" opacity="0.7"/>
+          <circle cx="420" cy="535" r="2.5" fill="#F09040" opacity="0.5"/>
+          <circle cx="60"  cy="480" r="2" fill="#FF6020" opacity="0.9"/>
+          <!-- Texto decorativo -->
+          <text x="240" y="530" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="20" fill="#C8973A" opacity="0.7">Cortes Premium</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section id="galeria" class="section-pad">
+  <div class="container">
+    <div class="galeria-header reveal">
+      <p class="section-label">Galería</p>
+      <h2 class="section-title">Nuestros <em>Cortes</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="galeria-grid reveal">
+
+      <!-- Celda 1 — Rib Eye (SVG ilustrativo) -->
+      <div class="galeria-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" style="width:100%;height:100%;display:block;">
+          <defs>
+            <radialGradient id="g1" cx="45%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#D04020"/>
+              <stop offset="70%" stop-color="#8B1E0E"/>
+              <stop offset="100%" stop-color="#3D0A03"/>
+            </radialGradient>
+            <filter id="f1"><feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="4" seed="2"/><feColorMatrix type="saturate" values="1.5"/><feBlend in="SourceGraphic" mode="multiply" result="blend"/><feComposite in="blend" in2="SourceGraphic" operator="atop"/></filter>
+          </defs>
+          <rect width="400" height="400" fill="#1A0A03"/>
+          <rect width="400" height="400" fill="#2C1005" opacity="0.7"/>
+          <!-- Plato -->
+          <ellipse cx="200" cy="220" rx="160" ry="120" fill="#252010" stroke="#5C4820" stroke-width="2"/>
+          <!-- Carne -->
+          <ellipse cx="200" cy="200" rx="130" ry="90" fill="url(#g1)"/>
+          <ellipse cx="200" cy="195" rx="120" ry="80" fill="#C03818" opacity="0.6" filter="url(#f1)"/>
+          <!-- Marmoleado blanco -->
+          <path d="M120 180 Q160 165 210 175 Q250 185 290 170" stroke="white" stroke-width="4" fill="none" opacity="0.15"/>
+          <path d="M130 205 Q180 192 230 205 Q265 215 300 200" stroke="white" stroke-width="3" fill="none" opacity="0.12"/>
+          <!-- Grasa perimetral -->
+          <path d="M90 200 Q110 130 185 120 Q255 112 305 150 Q340 180 335 230 Q320 285 265 305 Q200 318 150 295 Q100 272 90 235 Z" fill="none" stroke="#D4A060" stroke-width="14" opacity="0.3"/>
+          <!-- Marcas parrilla -->
+          <line x1="130" y1="165" x2="155" y2="240" stroke="#0D0500" stroke-width="8" opacity="0.5"/>
+          <line x1="160" y1="158" x2="185" y2="238" stroke="#0D0500" stroke-width="8" opacity="0.5"/>
+          <line x1="193" y1="155" x2="215" y2="240" stroke="#0D0500" stroke-width="8" opacity="0.5"/>
+          <line x1="225" y1="158" x2="245" y2="238" stroke="#0D0500" stroke-width="8" opacity="0.5"/>
+          <line x1="255" y1="163" x2="272" y2="235" stroke="#0D0500" stroke-width="8" opacity="0.5"/>
+          <!-- Brillo -->
+          <ellipse cx="175" cy="175" rx="45" ry="22" fill="white" opacity="0.08" transform="rotate(-20,175,175)"/>
+          <!-- label -->
+          <rect x="120" y="340" width="160" height="32" rx="4" fill="#1E0E05" stroke="#C8973A" stroke-width="1" opacity="0.85"/>
+          <text x="200" y="361" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="15" fill="#E8B85A">Rib Eye</text>
+        </svg>
+        <div class="g-label">Rib Eye — $550 MXN</div>
+      </div>
+
+      <!-- Celda 2 — New York -->
+      <div class="galeria-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" style="width:100%;height:100%;display:block;">
+          <defs>
+            <radialGradient id="g2" cx="55%" cy="45%" r="55%">
+              <stop offset="0%" stop-color="#C83820"/>
+              <stop offset="65%" stop-color="#7B1A0A"/>
+              <stop offset="100%" stop-color="#2C0802"/>
+            </radialGradient>
+          </defs>
+          <rect width="400" height="400" fill="#150803"/>
+          <rect x="30" y="30" width="340" height="340" rx="8" fill="#221008" opacity="0.8"/>
+          <!-- Tabla de madera -->
+          <rect x="50" y="100" width="300" height="210" rx="6" fill="#4A2808" opacity="0.5"/>
+          <!-- Carne forma rectangular estilo NY strip -->
+          <rect x="80" y="130" width="240" height="150" rx="20" fill="url(#g2)"/>
+          <rect x="90" y="138" width="220" height="134" rx="16" fill="#B83018" opacity="0.55"/>
+          <!-- Grasa un lado -->
+          <rect x="80" y="130" width="24" height="150" rx="12" fill="#D4A060" opacity="0.5"/>
+          <!-- Marcas parrilla -->
+          <line x1="100" y1="138" x2="100" y2="272" stroke="#0D0500" stroke-width="9" opacity="0.45"/>
+          <line x1="132" y1="135" x2="132" y2="272" stroke="#0D0500" stroke-width="9" opacity="0.45"/>
+          <line x1="165" y1="133" x2="165" y2="272" stroke="#0D0500" stroke-width="9" opacity="0.45"/>
+          <line x1="200" y1="133" x2="200" y2="272" stroke="#0D0500" stroke-width="9" opacity="0.45"/>
+          <line x1="235" y1="135" x2="235" y2="272" stroke="#0D0500" stroke-width="9" opacity="0.45"/>
+          <line x1="268" y1="138" x2="268" y2="272" stroke="#0D0500" stroke-width="9" opacity="0.45"/>
+          <!-- Marmoleado -->
+          <path d="M100 175 Q160 162 220 175 Q265 185 310 168" stroke="white" stroke-width="3" fill="none" opacity="0.13"/>
+          <path d="M100 215 Q155 200 215 215 Q260 228 310 210" stroke="white" stroke-width="2.5" fill="none" opacity="0.10"/>
+          <ellipse cx="185" cy="175" rx="50" ry="20" fill="white" opacity="0.07" transform="rotate(-10,185,175)"/>
+          <rect x="120" y="330" width="160" height="32" rx="4" fill="#1E0E05" stroke="#C8973A" stroke-width="1" opacity="0.85"/>
+          <text x="200" y="351" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="15" fill="#E8B85A">New York</text>
+        </svg>
+        <div class="g-label">New York — $400 MXN</div>
+      </div>
+
+      <!-- Celda 3 — Brisket -->
+      <div class="galeria-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" style="width:100%;height:100%;display:block;">
+          <defs>
+            <radialGradient id="g3" cx="40%" cy="50%" r="65%">
+              <stop offset="0%" stop-color="#A83010"/>
+              <stop offset="60%" stop-color="#6B1808"/>
+              <stop offset="100%" stop-color="#250803"/>
+            </radialGradient>
+          </defs>
+          <rect width="400" height="400" fill="#180A04"/>
+          <!-- Caldo / vapor -->
+          <ellipse cx="200" cy="340" rx="150" ry="45" fill="#3D1A08" opacity="0.8"/>
+          <ellipse cx="200" cy="330" rx="140" ry="38" fill="#4A2010" opacity="0.6"/>
+          <!-- Brisket desmenuzado -->
+          <ellipse cx="200" cy="210" rx="150" ry="100" fill="url(#g3)"/>
+          <!-- Textura de hebras -->
+          <path d="M80 200 Q130 185 190 200 Q240 215 300 198" stroke="#C04820" stroke-width="5" fill="none" opacity="0.4"/>
+          <path d="M85 215 Q140 200 195 215 Q245 230 305 215" stroke="#B03818" stroke-width="4" fill="none" opacity="0.35"/>
+          <path d="M90 230 Q145 215 200 230 Q250 242 308 228" stroke="#A83015" stroke-width="4" fill="none" opacity="0.3"/>
+          <path d="M88 185 Q135 172 192 185 Q242 198 302 183" stroke="#C85020" stroke-width="4" fill="none" opacity="0.3"/>
+          <path d="M90 170 Q140 158 194 170 Q244 182 302 168" stroke="#D05828" stroke-width="3" fill="none" opacity="0.25"/>
+          <!-- Jugo -->
+          <ellipse cx="200" cy="295" rx="110" ry="22" fill="#6B2808" opacity="0.7"/>
+          <ellipse cx="200" cy="290" rx="100" ry="18" fill="#7B3010" opacity="0.5"/>
+          <!-- Brillo -->
+          <ellipse cx="165" cy="185" rx="45" ry="20" fill="white" opacity="0.07" transform="rotate(-15,165,185)"/>
+          <rect x="110" y="340" width="180" height="32" rx="4" fill="#1E0E05" stroke="#C8973A" stroke-width="1" opacity="0.85"/>
+          <text x="200" y="361" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="14" fill="#E8B85A">Brisket en su Jugo</text>
+        </svg>
+        <div class="g-label">Brisket en su Jugo — $450 MXN</div>
+      </div>
+
+      <!-- Celda 4 — Arrachera -->
+      <div class="galeria-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" style="width:100%;height:100%;display:block;">
+          <defs>
+            <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#C04020"/>
+              <stop offset="50%" stop-color="#8B2010"/>
+              <stop offset="100%" stop-color="#4A0E08"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="400" fill="#160804"/>
+          <rect x="0" y="0" width="400" height="400" fill="#220E06" opacity="0.6"/>
+          <!-- Arrachera - forma alargada diagonal -->
+          <g transform="rotate(-15, 200, 200)">
+            <rect x="60" y="150" width="280" height="95" rx="25" fill="url(#g4)"/>
+            <rect x="68" y="157" width="264" height="81" rx="20" fill="#A03018" opacity="0.5"/>
+            <!-- Marcas parrilla en diagonal -->
+            <line x1="80"  y1="152" x2="80"  y2="243" stroke="#0D0500" stroke-width="10" opacity="0.5"/>
+            <line x1="115" y1="150" x2="115" y2="244" stroke="#0D0500" stroke-width="10" opacity="0.5"/>
+            <line x1="152" y1="150" x2="152" y2="244" stroke="#0D0500" stroke-width="10" opacity="0.5"/>
+            <line x1="190" y1="150" x2="190" y2="244" stroke="#0D0500" stroke-width="10" opacity="0.5"/>
+            <line x1="228" y1="150" x2="228" y2="244" stroke="#0D0500" stroke-width="10" opacity="0.5"/>
+            <line x1="266" y1="150" x2="266" y2="244" stroke="#0D0500" stroke-width="10" opacity="0.5"/>
+            <line x1="304" y1="152" x2="304" y2="243" stroke="#0D0500" stroke-width="10" opacity="0.5"/>
+            <!-- Fibras -->
+            <path d="M70 178 Q150 168 230 178 Q300 186 338 174" stroke="white" stroke-width="2" fill="none" opacity="0.1"/>
+            <path d="M70 200 Q150 190 235 200 Q302 209 338 197" stroke="white" stroke-width="2" fill="none" opacity="0.08"/>
+            <ellipse cx="190" cy="185" rx="60" ry="20" fill="white" opacity="0.06"/>
+          </g>
+          <!-- Limón decorativo -->
+          <circle cx="340" cy="320" r="22" fill="#8B9A10" opacity="0.7"/>
+          <circle cx="340" cy="320" r="18" fill="#A0B010" opacity="0.6"/>
+          <line x1="340" y1="302" x2="340" y2="338" stroke="#6B7808" stroke-width="2" opacity="0.5"/>
+          <line x1="322" y1="320" x2="358" y2="320" stroke="#6B7808" stroke-width="2" opacity="0.5"/>
+          <rect x="100" y="340" width="170" height="32" rx="4" fill="#1E0E05" stroke="#C8973A" stroke-width="1" opacity="0.85"/>
+          <text x="185" y="361" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="15" fill="#E8B85A">Arrachera</text>
+        </svg>
+        <div class="g-label">Arrachera — $300 MXN</div>
+      </div>
+
+      <!-- Celda 5 — Brasa / ambiente -->
+      <div class="galeria-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" style="width:100%;height:100%;display:block;">
+          <defs>
+            <radialGradient id="fire" cx="50%" cy="80%" r="60%">
+              <stop offset="0%" stop-color="#FF8C20" stop-opacity="0.9"/>
+              <stop offset="40%" stop-color="#E84010" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#1A0800" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="ember" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FF6010"/>
+              <stop offset="100%" stop-color="#8B1E00"/>
+            </radialGradient>
+          </defs>
+          <rect width="400" height="400" fill="#0D0500"/>
+          <!-- Parrilla - barras horizontales -->
+          <line x1="40" y1="200" x2="360" y2="200" stroke="#3A1A08" stroke-width="14"/>
+          <line x1="40" y1="225" x2="360" y2="225" stroke="#3A1A08" stroke-width="14"/>
+          <line x1="40" y1="250" x2="360" y2="250" stroke="#3A1A08" stroke-width="14"/>
+          <line x1="40" y1="275" x2="360" y2="275" stroke="#3A1A08" stroke-width="14"/>
+          <!-- Fuego / brasas -->
+          <ellipse cx="200" cy="310" rx="180" ry="70" fill="url(#fire)"/>
+          <!-- Brasas individuales -->
+          <circle cx="90"  cy="310" r="8"  fill="url(#ember)" opacity="0.9"/>
+          <circle cx="130" cy="305" r="6"  fill="url(#ember)" opacity="0.8"/>
+          <circle cx="175" cy="315" r="10" fill="url(#ember)" opacity="0.95"/>
+          <circle cx="220" cy="308" r="7"  fill="url(#ember)" opacity="0.85"/>
+          <circle cx="260" cy="312" r="9"  fill="url(#ember)" opacity="0.9"/>
+          <circle cx="310" cy="306" r="6"  fill="url(#ember)" opacity="0.8"/>
+          <!-- Llamas -->
+          <path d="M150 290 Q155 260 165 240 Q170 255 168 275 Q180 245 195 220 Q200 245 195 268 Q210 238 225 215 Q228 242 222 268 Q238 245 248 265 Q240 285 248 295" stroke="#FF8020" stroke-width="3" fill="none" opacity="0.7"/>
+          <!-- Reflejo en parrilla -->
+          <line x1="40" y1="200" x2="360" y2="200" stroke="#FF5010" stroke-width="2" opacity="0.15"/>
+          <line x1="40" y1="225" x2="360" y2="225" stroke="#FF5010" stroke-width="2" opacity="0.12"/>
+          <!-- Chispas -->
+          <circle cx="100" cy="170" r="2" fill="#FFA030" opacity="0.9"/>
+          <circle cx="180" cy="150" r="1.5" fill="#FF8020" opacity="0.8"/>
+          <circle cx="280" cy="160" r="2" fill="#FFA030" opacity="0.85"/>
+          <circle cx="330" cy="140" r="1.5" fill="#FF8020" opacity="0.7"/>
+          <circle cx="220" cy="130" r="2.5" fill="#FFB040" opacity="0.9"/>
+          <!-- Carne sobre la parrilla -->
+          <rect x="80" y="165" width="240" height="45" rx="15" fill="#8B2010" opacity="0.85"/>
+          <rect x="88" y="170" width="224" height="35" rx="12" fill="#A02818" opacity="0.6"/>
+          <line x1="100" y1="166" x2="100" y2="208" stroke="#0D0500" stroke-width="8" opacity="0.4"/>
+          <line x1="135" y1="165" x2="135" y2="209" stroke="#0D0500" stroke-width="8" opacity="0.4"/>
+          <line x1="172" y1="165" x2="172" y2="209" stroke="#0D0500" stroke-width="8" opacity="0.4"/>
+          <line x1="210" y1="165" x2="210" y2="209" stroke="#0D0500" stroke-width="8" opacity="0.4"/>
+          <line x1="248" y1="165" x2="248" y2="209" stroke="#0D0500" stroke-width="8" opacity="0.4"/>
+          <line x1="285" y1="166" x2="285" y2="208" stroke="#0D0500" stroke-width="8" opacity="0.4"/>
+          <text x="200" y="385" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16" fill="#C8973A" opacity="0.8">La Brasa</text>
+        </svg>
+        <div class="g-label">Directo a la brasa</div>
+      </div>
+
+      <!-- Celda 6 — Ambiente restaurante -->
+      <div class="galeria-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" style="width:100%;height:100%;display:block;">
+          <defs>
+            <radialGradient id="candle" cx="50%" cy="30%" r="50%">
+              <stop offset="0%" stop-color="#FFF0A0" stop-opacity="0.9"/>
+              <stop offset="50%" stop-color="#E8A030" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#2C1005" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="bg6" cx="50%" cy="40%" r="70%">
+              <stop offset="0%" stop-color="#3D1A08"/>
+              <stop offset="100%" stop-color="#0D0500"/>
+            </radialGradient>
+          </defs>
+          <rect width="400" height="400" fill="url(#bg6)"/>
+          <!-- Mesa de madera -->
+          <rect x="60" y="280" width="280" height="15" rx="4" fill="#4A2808"/>
+          <rect x="60" y="295" width="280" height="8" rx="2" fill="#3A1E06"/>
+          <!-- Plato -->
+          <ellipse cx="200" cy="270" rx="95" ry="30" fill="#252015" stroke="#3A2E15" stroke-width="1.5"/>
+          <ellipse cx="200" cy="265" rx="80" ry="24" fill="#1A1508"/>
+          <!-- Corte en el plato -->
+          <ellipse cx="200" cy="262" rx="60" ry="18" fill="#8B2010"/>
+          <ellipse cx="200" cy="260" rx="55" ry="15" fill="#A03018" opacity="0.7"/>
+          <!-- Copa de vino -->
+          <path d="M310 250 Q320 220 325 200 Q330 220 340 250 Q335 252 315 252 Z" fill="#8B1830" opacity="0.6"/>
+          <path d="M310 250 Q320 220 325 200 Q330 220 340 250" stroke="#C84060" stroke-width="1" fill="none" opacity="0.4"/>
+          <rect x="323" y="252" width="4" height="28" fill="#6B4820" opacity="0.5"/>
+          <ellipse cx="325" cy="281" rx="10" ry="4" fill="#4A3010" opacity="0.6"/>
+          <!-- Vela / luz -->
+          <rect x="120" y="240" width="8" height="30" rx="2" fill="#E8E0C0" opacity="0.7"/>
+          <ellipse cx="124" cy="237" rx="6" ry="8" fill="url(#candle)"/>
+          <path d="M121 230 Q124 220 127 230" stroke="#FFF0A0" stroke-width="1.5" fill="none" opacity="0.8"/>
+          <!-- Reflejo luz en la mesa -->
+          <ellipse cx="200" cy="290" rx="120" ry="12" fill="#E8A030" opacity="0.04"/>
+          <!-- Servilleta -->
+          <path d="M130 275 Q155 268 160 280 Q155 288 130 285 Z" fill="#F0EAD8" opacity="0.15"/>
+          <text x="200" y="370" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="16" fill="#C8973A" opacity="0.8">Ambiente íntimo</text>
+        </svg>
+        <div class="g-label">Ambiente de madera fina</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MENÚ -->
+<section id="menu" class="section-pad">
+  <div class="container">
+    <div class="menu-header reveal">
+      <p class="section-label">Nuestra Carta</p>
+      <h2 class="section-title">El <em>Menú</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="menu-cols">
+      <div class="reveal">
+        <div class="menu-category">
+          <div class="menu-cat-title">Cortes Principales</div>
+          <div class="menu-item">
+            <span class="menu-item-name">Rib Eye</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">$550 MXN</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">New York</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">$400 MXN</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Brisket en su Jugo</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">$450 MXN</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Arrachera</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">$300 MXN</span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="menu-category">
+          <div class="menu-cat-title">Bebidas</div>
+          <div class="menu-item">
+            <span class="menu-item-name">Vino de la Casa</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">Precio en carta</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Coca-Cola</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">Precio en carta</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Sprite</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">Precio en carta</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Mundet</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">Precio en carta</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Fanta</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">Precio en carta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" class="section-pad">
+  <div class="container">
+    <div style="text-align:center; margin-bottom: 3.5rem;" class="reveal">
+      <p class="section-label">Encuéntranos</p>
+      <h2 class="section-title">Contacto & <em>Horarios</em></h2>
+      <div class="gold-line" style="margin: 1.5rem auto;"></div>
+    </div>
+    <div class="contacto-grid reveal">
+      <div class="contacto-block">
+        <div class="contacto-icon">📍</div>
+        <h3>Dirección</h3>
+        <p>Blvd. Antonio Rocha Cordero 157<br>Lomas del Pedregal<br>78427 San Luis Potosí, S.L.P.</p>
+      </div>
+      <div class="contacto-block">
+        <div class="contacto-icon">🕐</div>
+        <h3>Horarios</h3>
+        <p>Todos los días<br>8:00 AM — 11:00 PM</p>
+      </div>
+      <div class="contacto-block">
+        <div class="contacto-icon">📞</div>
+        <h3>Teléfono</h3>
+        <p><a href="tel:4445785822">444 578 5822</a></p>
+        <p style="margin-top:0.5rem; font-size:0.9rem; color: var(--text-muted);">Reservaciones y pedidos</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Prueba Restaurante — San Luis Potosí &bull; Todos los derechos reservados</p>
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('nav-links').classList.remove('open');
+  }
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
