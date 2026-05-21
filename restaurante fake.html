@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prueba Restaurante — Cortes Finos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --wood-dark: #2C1A0E;
+    --wood-mid: #5C3A1E;
+    --wood-warm: #8B5A2B;
+    --wood-light: #C49A6C;
+    --wood-pale: #E8D5B7;
+    --cream: #F5EFE0;
+    --gold: #C8973A;
+    --gold-light: #E8B85A;
+    --text-dark: #1A0F06;
+    --text-mid: #4A2F1A;
+    --text-muted: #7A5C3A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Raleway', sans-serif;
+    background: var(--wood-dark);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ---- GRAIN OVERLAY ---- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ---- WOOD GRAIN LINES ---- */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      92deg,
+      transparent,
+      transparent 80px,
+      rgba(139,90,43,0.04) 80px,
+      rgba(139,90,43,0.04) 81px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(28, 16, 8, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(200,151,58,0.2);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--wood-pale);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+    transition: all 0.3s;
+  }
+
+  /* ---- HERO ---- */
+  #hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    overflow: hidden;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(92,58,30,0.6) 0%, transparent 70%),
+      linear-gradient(180deg, rgba(28,16,8,0.3) 0%, rgba(28,16,8,0.8) 100%);
+  }
+
+  /* Animated wood rings */
+  .wood-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(200,151,58,0.08);
+    animation: pulse-ring 6s ease-in-out infinite;
+  }
+
+  .wood-ring:nth-child(1) { width: 300px; height: 300px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 0s; }
+  .wood-ring:nth-child(2) { width: 500px; height: 500px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 1s; }
+  .wood-ring:nth-child(3) { width: 700px; height: 700px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 2s; }
+  .wood-ring:nth-child(4) { width: 900px; height: 900px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 3s; }
+
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 0.4; transform: translate(-50%,-50%) scale(1); }
+    50% { opacity: 0.1; transform: translate(-50%,-50%) scale(1.03); }
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 800px; }
+
+  .hero-eyebrow {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 1s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 700;
+    line-height: 0.95;
+    color: var(--cream);
+    letter-spacing: -0.02em;
+    animation: fadeUp 1s 0.15s ease both;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+    display: block;
+  }
+
+  .hero-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 2rem auto;
+    animation: scaleX 1s 0.3s ease both;
+    transform-origin: center;
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--wood-pale);
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+    animation: fadeUp 1s 0.45s ease both;
+  }
+
+  .hero-cta {
+    margin-top: 3rem;
+    animation: fadeUp 1s 0.6s ease both;
+  }
+
+  .btn-gold {
+    display: inline-block;
+    padding: 0.9rem 2.5rem;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-gold::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    z-index: -1;
+  }
+
+  .btn-gold:hover { color: var(--wood-dark); }
+  .btn-gold:hover::before { transform: scaleX(1); }
+
+  /* ---- SECTIONS ---- */
+  section { position: relative; z-index: 1; }
+
+  .section-pad { padding: 6rem 2rem; }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--cream);
+  }
+
+  .section-title em { font-style: italic; color: var(--gold-light); }
+
+  .gold-line {
+    width: 50px;
+    height: 1px;
+    background: var(--gold);
+    margin: 1.5rem 0;
+  }
+
+  /* ---- HISTORIA ---- */
+  #historia {
+    background: linear-gradient(135deg, #1E0F07 0%, #2C1A0E 50%, #1A0D05 100%);
+    border-top: 1px solid rgba(200,151,58,0.15);
+    border-bottom: 1px solid rgba(200,151,58,0.15);
+  }
+
+  .historia-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .historia-text p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--wood-pale);
+    margin-bottom: 1.2rem;
+  }
+
+  .historia-img-wrap {
+    position: relative;
+  }
+
+  .historia-img-wrap::before {
+    content: '';
+    position: absolute;
+    top: -12px; right: -12px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(200,151,58,0.3);
+    z-index: 0;
+  }
+
+  .historia-img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+    filter: sepia(20%) contrast(1.05);
+  }
+
+  /* ---- GALERIA ---- */
+  #galeria {
+    background: var(--wood-dark);
+  }
+
+  .galeria-header { text-align: center; margin-bottom: 3.5rem; }
+  .galeria-header .gold-line { margin: 1.5rem auto; }
+
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(200,151,58,0.1);
+  }
+
+  .galeria-item {
+    overflow: hidden;
+    aspect-ratio: 1;
+    cursor: pointer;
+  }
+
+  .galeria-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(15%) contrast(1.1) brightness(0.9);
+    transition: transform 0.6s ease, filter 0.6s ease;
+  }
+
+  .galeria-item:hover img {
+    transform: scale(1.08);
+    filter: sepia(0%) contrast(1.1) brightness(1);
+  }
+
+  /* ---- MENÚ ---- */
+  #menu {
+    background: linear-gradient(180deg, #1A0D05 0%, #2C1A0E 100%);
+    border-top: 1px solid rgba(200,151,58,0.15);
+  }
+
+  .menu-header { text-align: center; margin-bottom: 4rem; }
+  .menu-header .gold-line { margin: 1.5rem auto; }
+
+  .menu-category {
+    margin-bottom: 3.5rem;
+  }
+
+  .menu-cat-title {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid rgba(200,151,58,0.25);
+    padding-bottom: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(200,151,58,0.08);
+    gap: 1rem;
+  }
+
+  .menu-item:last-child { border-bottom: none; }
+
+  .menu-item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--cream);
+    flex: 1;
+  }
+
+  .menu-dots {
+    flex: 1;
+    border-bottom: 1px dotted rgba(200,151,58,0.25);
+    margin: 0 1rem;
+    margin-bottom: 4px;
+    min-width: 20px;
+  }
+
+  .menu-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--gold-light);
+    white-space: nowrap;
+  }
+
+  .menu-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  /* ---- HORARIOS / CONTACTO ---- */
+  #contacto {
+    background: #160B04;
+    border-top: 1px solid rgba(200,151,58,0.15);
+  }
+
+  .contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3rem;
+    text-align: center;
+  }
+
+  .contacto-block h3 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .contacto-block p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--wood-pale);
+    line-height: 1.7;
+  }
+
+  .contacto-block a {
+    color: var(--wood-pale);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .contacto-block a:hover { color: var(--gold); }
+
+  .contacto-icon {
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(200,151,58,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.2rem;
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    background: #0D0603;
+    border-top: 1px solid rgba(200,151,58,0.15);
+    text-align: center;
+    padding: 2rem;
+  }
+
+  footer p {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  /* ---- ANIMATIONS ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scaleX {
+    from { transform: scaleX(0); opacity: 0; }
+    to { transform: scaleX(1); opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 900px) {
+    .historia-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .historia-img-wrap { max-width: 480px; margin: 0 auto; }
+    .menu-cols { grid-template-columns: 1fr; gap: 0; }
+    .contacto-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
+  @media (max-width: 650px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(12,6,2,0.98);
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      z-index: 200;
+    }
+    .nav-links.open a { font-size: 1.1rem; }
+    .hamburger { display: flex; z-index: 300; }
+    .galeria-grid { grid-template-columns: repeat(2, 1fr); }
+    .section-pad { padding: 4rem 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Prueba Restaurante</div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#historia" onclick="closeMenu()">Nuestra Historia</a></li>
+    <li><a href="#galeria" onclick="closeMenu()">Galería</a></li>
+    <li><a href="#menu" onclick="closeMenu()">Menú</a></li>
+    <li><a href="#contacto" onclick="closeMenu()">Contacto</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="wood-ring"></div>
+  <div class="wood-ring"></div>
+  <div class="wood-ring"></div>
+  <div class="wood-ring"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">San Luis Potosí &bull; Cortes Premium</p>
+    <h1 class="hero-title">
+      Prueba<br>
+      <em>Restaurante</em>
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-subtitle">Donde la brasa y la tradición se encuentran<br>en cada corte perfectamente preparado.</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn-gold">Ver el Menú</a>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORIA -->
+<section id="historia" class="section-pad">
+  <div class="container">
+    <div class="historia-grid">
+      <div class="historia-text reveal">
+        <p class="section-label">Nuestra Historia</p>
+        <h2 class="section-title">Una herencia de <em>fuego y sabor</em></h2>
+        <div class="gold-line"></div>
+        <p>Prueba Restaurante nació en 2008 de las manos de don Rafael Mendoza, un potosino apasionado por las brasas que aprendió el arte del corte perfecto en las haciendas del centro del país. Su visión era sencilla: llevar a San Luis Potosí una experiencia de carne sin concesiones.</p>
+        <p>Durante más de quince años, cada corte que sale de nuestra cocina lleva el mismo rigor y respeto por la materia prima. Seleccionamos únicamente reses de primera calidad, maduradas al punto exacto, para que la brasa haga su magia con cada fibra.</p>
+        <p>Hoy, lo que empezó como un sueño familiar se ha convertido en el destino favorito de quienes saben que una buena carne, bien preparada, es mucho más que una comida: es una experiencia.</p>
+      </div>
+      <div class="historia-img-wrap reveal">
+        <img
+          class="historia-img"
+          src="https://images.unsplash.com/photo-1558030006-450675393462?w=600&q=80"
+          alt="Corte de carne en la brasa"
+        >
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section id="galeria" class="section-pad">
+  <div class="container">
+    <div class="galeria-header reveal">
+      <p class="section-label">Galería</p>
+      <h2 class="section-title">Nuestros <em>Cortes</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="galeria-grid reveal">
+      <div class="galeria-item">
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&q=80" alt="Rib Eye">
+      </div>
+      <div class="galeria-item">
+        <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=500&q=80" alt="New York Strip">
+      </div>
+      <div class="galeria-item">
+        <img src="https://images.unsplash.com/photo-1558030006-450675393462?w=500&q=80" alt="Corte Premium">
+      </div>
+      <div class="galeria-item">
+        <img src="https://images.unsplash.com/photo-1588347818036-95b010e9b9b6?w=500&q=80" alt="Brisket">
+      </div>
+      <div class="galeria-item">
+        <img src="https://images.unsplash.com/photo-1550030959-1add3e6b6d78?w=500&q=80" alt="Arrachera">
+      </div>
+      <div class="galeria-item">
+        <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=500&q=80" alt="Corte en brasa">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENÚ -->
+<section id="menu" class="section-pad">
+  <div class="container">
+    <div class="menu-header reveal">
+      <p class="section-label">Nuestra Carta</p>
+      <h2 class="section-title">El <em>Menú</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="menu-cols">
+      <div class="reveal">
+        <div class="menu-category">
+          <div class="menu-cat-title">Cortes Principales</div>
+          <div class="menu-item">
+            <span class="menu-item-name">Rib Eye</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">$550 MXN</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">New York</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">$400 MXN</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Brisket en su Jugo</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">$450 MXN</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Arrachera</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">$300 MXN</span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="menu-category">
+          <div class="menu-cat-title">Bebidas</div>
+          <div class="menu-item">
+            <span class="menu-item-name">Vino de la Casa</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">Precio en carta</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Coca-Cola</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">Precio en carta</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Sprite</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">Precio en carta</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Mundet</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">Precio en carta</span>
+          </div>
+          <div class="menu-item">
+            <span class="menu-item-name">Fanta</span>
+            <span class="menu-dots"></span>
+            <span class="menu-price">Precio en carta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" class="section-pad">
+  <div class="container">
+    <div style="text-align:center; margin-bottom: 3.5rem;" class="reveal">
+      <p class="section-label">Encuéntranos</p>
+      <h2 class="section-title">Contacto & <em>Horarios</em></h2>
+      <div class="gold-line" style="margin: 1.5rem auto;"></div>
+    </div>
+    <div class="contacto-grid reveal">
+      <div class="contacto-block">
+        <div class="contacto-icon">📍</div>
+        <h3>Dirección</h3>
+        <p>Blvd. Antonio Rocha Cordero 157<br>Lomas del Pedregal<br>78427 San Luis Potosí, S.L.P.</p>
+      </div>
+      <div class="contacto-block">
+        <div class="contacto-icon">🕐</div>
+        <h3>Horarios</h3>
+        <p>Todos los días<br>8:00 AM — 11:00 PM</p>
+      </div>
+      <div class="contacto-block">
+        <div class="contacto-icon">📞</div>
+        <h3>Teléfono</h3>
+        <p><a href="tel:4445785822">444 578 5822</a></p>
+        <p style="margin-top:0.5rem; font-size:0.9rem; color: var(--text-muted);">Reservaciones y pedidos</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Prueba Restaurante — San Luis Potosí &bull; Todos los derechos reservados</p>
+</footer>
+
+<script>
+  // Hamburger menu
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('nav-links').classList.remove('open');
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
